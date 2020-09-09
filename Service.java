@@ -10,7 +10,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import static timetrack.TimeTrack.getConnection;
 import timetrack.keys;
 
@@ -24,8 +28,12 @@ public class Service {
         
     }
     
-    public void sumTimeOfProject(int projectID) {
-
+    //public String searchAndGetSum(String searchProjectName){
+        //return sumTimeOfProject(searchProjectName());
+    //}
+        
+    public ArrayList<String> sumTimeOfProject(int projectID) {
+        ArrayList<String> resultArray = new ArrayList<String>();
         //our query, plus projectID converted to string
         String query = "SELECT TIMEDIFF(endTime, startTime) FROM timeframes WHERE projectID = " + String.valueOf(projectID);
         try {
@@ -33,14 +41,31 @@ public class Service {
             PreparedStatement statement = con.prepareStatement(query);
             
             ResultSet result = statement.executeQuery();
-            ArrayList<String> array = new ArrayList<String>();
             while(result.next()){
-                System.out.println(result.getString("TIMEDIFF(endTime, startTime)"));
+                resultArray.add(result.getString("TIMEDIFF(endTime, startTime)"));
+                //System.out.println(result.getString("TIMEDIFF(endTime, startTime)"));
             }
-            
         } catch(Exception e) { System.out.println(e);}
-      
+        return resultArray;
     }
+    
+    public int searchProjectName(String searchProjectName) {
+        String query = "SELECT id FROM projects WHERE name = '" + searchProjectName + "'";
+        int returnResult;
+        try {
+            Connection con = getConnection();
+            PreparedStatement statement = con.prepareStatement(query);
+            
+            ResultSet result = statement.executeQuery();
+            result.next();
+            return result.getInt("id");
+            
+        } catch(Exception e) {System.out.println(e);}
+        
+       
+        return 0;
+    }
+    
     
     public static Connection getConnection() throws Exception {
         try {

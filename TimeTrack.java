@@ -23,11 +23,25 @@ public class TimeTrack {
         Service service = new Service();
         getConnection();
         createTables();
-        service.sumTimeOfProject(3);
-        //User user1 = new User("Pelle", "email", "password", 0);
-        //Project myProject = new Project("second project", "also good project", "me and I", "they");
-        //user1.createTimeFrame(1);
-        // TODO code application logic here
+        
+        //create user
+        User user1 = new User("Nina", "email", "password", 0);
+        //create project
+        Project myProject = new Project("second project", "also good project", "me and I", "they");
+        //user creates timeframe for project 1
+        user1.createTimeFrame(1);
+        
+        //print times from projectID
+        System.out.println(
+            "Time of project ID 3 " +
+            service.sumTimeOfProject(3)
+        );
+        
+        //print times from project name search
+        System.out.println(
+            "Times from search for project: " +
+            service.sumTimeOfProject(service.searchProjectName("Total tertiary toolset"))
+        );
     }
 
     public static Connection getConnection() throws Exception {
@@ -58,8 +72,7 @@ public class TimeTrack {
             PreparedStatement create = con.prepareStatement(tablesArray[i]);
             create.executeUpdate();
             
-            } catch(Exception e) {System.out.println(e);}
-            finally{System.out.println("Function complete, table created if it didnt already exist");};   
+            } catch(Exception e) {System.out.println(e);}  
         }
     }
 }
