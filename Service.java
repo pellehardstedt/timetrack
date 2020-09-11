@@ -9,14 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import static timetrack.TimeTrack.getConnection;
-import timetrack.keys;
 
 /**
  *
@@ -28,10 +21,14 @@ public class Service {
         
     }
     
-    //public String searchAndGetSum(String searchProjectName){
-        //return sumTimeOfProject(searchProjectName());
-    //}
-        
+    //search with a string
+    //need to handle date format and sum the times
+    public String searchAndGetSum(String searchName){
+        sumTimeOfProject(searchProjectName(searchName));
+        return "";
+    }
+    
+    //search project with ID, returns an ArrayList with times in strings
     public ArrayList<String> sumTimeOfProject(int projectID) {
         ArrayList<String> resultArray = new ArrayList<String>();
         //our query, plus projectID converted to string
@@ -49,6 +46,7 @@ public class Service {
         return resultArray;
     }
     
+    //find project by name, returns projectID
     public int searchProjectName(String searchProjectName) {
         String query = "SELECT id FROM projects WHERE name = '" + searchProjectName + "'";
         int returnResult;
